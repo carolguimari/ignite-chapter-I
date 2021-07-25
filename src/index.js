@@ -54,7 +54,6 @@ app.get('/todos', checksExistsUserAccount, (request, response) => {
    
 	return response.status(200).json(user.todos)
 
-
 });
 
 app.post('/todos', checksExistsUserAccount, (request, response) => {
@@ -63,17 +62,17 @@ app.post('/todos', checksExistsUserAccount, (request, response) => {
 
 	const { user } = request;
 
-	const task = {
+	const todo = { 
 		id: uuidv4(),
 		title,
-		done: false,
-		deadline: new Date(deadline),
+		done: false, 
+		deadline: new Date(deadline), 
 		created_at: new Date()
-	};
-    
-	user.todos.push(task)
+	}
 
-	return response.status(201).json(user.todos)
+	user.todos.push(todo);
+
+	return response.status(201).json(todo)
 
 });
 
@@ -84,16 +83,16 @@ app.put('/todos/:id', checksExistsUserAccount, (request, response) => {
  
 	const { user } = request;
 
-	const task = user.todos.find(task => task.id === taskId)
+	const todo = user.todos.find(task => task.id === taskId)
  
-	if(!task) {
+	if(!todo) {
 		return response.status(404).json({ error: "Task not found!"})
 	}
  
-	task.title = title
-	task.deadline = deadline
+	todo.title = title
+	todo.deadline = deadline
 
-	return response.status(200).json(task)
+	return response.status(200).json(todo)
   
 });
 
@@ -102,15 +101,15 @@ app.patch('/todos/:id/done', checksExistsUserAccount, (request, response) => {
  
 	const { user } = request;
 
-	const task = user.todos.find(task => task.id === taskId)
+	const todo = user.todos.find(task => task.id === taskId)
  
-	if(!task) {
+	if(!todo) {
 		return response.status(404).json({ error: "Task not found!"})
 	}
 
-	task.done = true
+	todo.done = true
 
-	return response.status(200).json(task)
+	return response.status(200).json(todo)
 
 });
 
@@ -119,18 +118,17 @@ app.delete('/todos/:id', checksExistsUserAccount, (request, response) => {
  
 	const { user } = request;
 
-	const task = user.todos.find(task => task.id === taskId)
+	const todo = user.todos.find(task => task.id === taskId)
  
-	if(!task) {
+	if(!todo) {
 		return response.status(404).json({ error: "Task not found!"})
 	}
-	const i = user.todos.indexOf(task)
+	const i = user.todos.indexOf(todo)
   
 	user.todos.splice(i, 1)
 
-	return response.status(200).json(user.todos)
+	return response.status(204).json()
 });
 
 
-app.listen(3333);
 module.exports = app
